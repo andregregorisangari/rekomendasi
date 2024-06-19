@@ -3,24 +3,23 @@ steps:
     args:
       - "build"
       - "-t"
-      - "us-central1-docker.pkg.dev/$PROJECT_ID/sharingsession-artifact/model-image:$COMMIT_SHA"
+      - "us-central1-docker.pkg.dev/$PROJECT_ID/rekomendasi-artifact/model-image:$COMMIT_SHA"
       - "."
   - name: gcr.io/cloud-builders/docker
     args:
       - "push"
-      - "us-central1-docker.pkg.dev/$PROJECT_ID/sharingsession-artifact/model-image:$COMMIT_SHA"
+      - "us-central1-docker.pkg.dev/$PROJECT_ID/rekomendasi-artifact/model-image:$COMMIT_SHA"
   - name: "gcr.io/cloud-builders/gcloud"
     entrypoint: gcloud
     args:
       - "run"
       - "deploy"
-      - "api-model"
-      - "--image=us-central1-docker.pkg.dev/$PROJECT_ID/sharingsession-artifact/model-image:$COMMIT_SHA"
+      - "rekomendasi-api"
+      - "--image=us-central1-docker.pkg.dev/$PROJECT_ID/rekomendasi-artifact/model-image:$COMMIT_SHA"
       - "--region=us-central1"
       - "--cpu=1"
       - "--memory=2048Mi"
       - "--allow-unauthenticated"
-      - "--set-secrets=BUCKET_NAME=bucket_name:latest"
 images:
-  - "us-central1-docker.pkg.dev/$PROJECT_ID/sharingsession-artifact/model-image:$COMMIT_SHA"
-logsBucket: "gs://sharingsession-buckets/logs"
+  - "us-central1-docker.pkg.dev/$PROJECT_ID/rekomendasi-artifact/model-image:$COMMIT_SHA"
+logsBucket: "gs://rekomendasi-bucket99/logs"
