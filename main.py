@@ -63,7 +63,7 @@ place_ids = rates["Place_Id"].unique().tolist()
 
 num_users = len(user_ids)
 num_places = len(place_ids)
-embedding_size = 50  # Define the embedding size (you can adjust this value)
+embedding_size = 50
 
 user2user_encoded = {x: i for i, x in enumerate(user_ids)}
 place2place_encoded = {x: i for i, x in enumerate(place_ids)}
