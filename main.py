@@ -81,7 +81,8 @@ sample_inputs = np.array([[0, 0], [1, 1]])  # Example shape, replace with actual
 model(sample_inputs)  # Call the model to build it
 
 # Save the model in TensorFlow SavedModel format
-model.save('model_destinatik_v2', save_format='tf')
+model.save_weights('model_destinatik_v2_weights.h5')
+
 
 @app.route('/recommend', methods=['POST'])
 def recommend():
@@ -89,9 +90,10 @@ def recommend():
         data = request.json
         user_id = data.get('user_id')
         city = data.get('city')
+        place_id = data.get('place_id')
 
-        if not user_id and not city:
-            return jsonify({'error': 'Either user_id or city must be provided'}), 400
+        if not user_id and not city and not place_id:
+            return jsonify({'error': 'Either user_id, city, or place_id must be provided'}), 400
 
         if user_id:
             if user_id not in user2user_encoded:
@@ -103,9 +105,12 @@ def recommend():
             user_rated_places = []
 
         if city:
-            # Filter places based on the city
             places_in_city = places[places['City'] == city]
             places_not_visited = places_in_city[~places_in_city["Place_Id"].isin(user_rated_places)]["Place_Id"]
+        elif place_id:
+            if place_id not in place2place_encoded:
+                return jsonify({'error': 'Place ID not found'}), 400
+            places_not_visited = [place_id]
         else:
             places_not_visited = places[~places["Place_Id"].isin(user_rated_places)]["Place_Id"]
 
@@ -114,9 +119,12 @@ def recommend():
         )
         places_not_visited = [[place2place_encoded.get(x)] for x in places_not_visited]
 
-        user_place_array = np.hstack(
-            ([[user_encoder]] * len(places_not_visited), places_not_visited)
-        )
+        if user_encoder == 0:
+            user_place_array = np.array(places_not_visited)
+        else:
+            user_place_array = np.hstack(
+                ([[user_encoder]] * len(places_not_visited), places_not_visited)
+            )
 
         ratings = model.predict(user_place_array).flatten()
         top_ratings_indices = ratings.argsort()[-10:][::-1]
