@@ -52,9 +52,8 @@ class RecommenderNet(keras.Model):
         return cls(**config)
 
 # Load the user and place encodings
-base_path = 'D:/capstone/rekomendasi-api/'
-tourism_rating_path = base_path + 'tourism_rating.csv'
-tourism_with_id_path = base_path + 'tourism_with_id.csv'
+tourism_rating_path = 'tourism_rating.csv'
+tourism_with_id_path = 'tourism_with_id.csv'
 
 rates = pd.read_csv(tourism_rating_path)
 places = pd.read_csv(tourism_with_id_path)
