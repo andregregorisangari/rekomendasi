@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import gdown
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -80,8 +81,9 @@ model.compile(
 sample_inputs = np.array([[0, 0], [1, 1]])  # Example shape, replace with actual data shape
 model(sample_inputs)  # Call the model to build it
 
-# Save the model in TensorFlow SavedModel format
-model.save_weights('model_destinatik.weights')
+url = "https://drive.google.com/uc?id=1tmw8hmRUU7QmpjbOasVOoXtMTB1JgQiA"
+output = 'model.h5'
+gdown.download(url, output)
 
 @app.route('/', methods=['GET'])
 def hello():
