@@ -1,0 +1,2 @@
+model_checkpoint_path: "model_destinatik.weights"
+all_model_checkpoint_paths: "model_destinatik.weights"
