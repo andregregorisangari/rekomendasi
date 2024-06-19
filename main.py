@@ -1,3 +1,4 @@
+import os; os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from flask import Flask, request, jsonify
 import gdown
 import numpy as np
@@ -7,6 +8,12 @@ from tensorflow import keras
 from tensorflow.keras import layers
 
 app = Flask(__name__)
+
+
+url = "https://drive.google.com/uc?id=1tmw8hmRUU7QmpjbOasVOoXtMTB1JgQiA"
+output = 'model.h5'
+gdown.download(url, output)
+
 
 class RecommenderNet(keras.Model):
     def __init__(self, num_users, num_places, embedding_size, **kwargs):
@@ -81,10 +88,6 @@ model.compile(
 sample_inputs = np.array([[0, 0], [1, 1]])  # Example shape, replace with actual data shape
 model(sample_inputs)  # Call the model to build it
 
-url = "https://drive.google.com/uc?id=1tmw8hmRUU7QmpjbOasVOoXtMTB1JgQiA"
-output = 'model.h5'
-gdown.download(url, output)
-
 @app.route('/', methods=['GET'])
 def hello():
     return 'Hello World'
@@ -92,8 +95,6 @@ def hello():
 
 @app.route('/recommend', methods=['POST'])
 def recommend():
-    if request.method == 'GET':
-        return 'Hello World'
     try:
         data = request.json
         user_id = data.get('user_id')
@@ -152,4 +153,4 @@ def recommend():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5001)))
