@@ -81,7 +81,7 @@ sample_inputs = np.array([[0, 0], [1, 1]])  # Example shape, replace with actual
 model(sample_inputs)  # Call the model to build it
 
 # Save the model in TensorFlow SavedModel format
-model.save_weights('model_destinatik_v2_weights.h5')
+model.save_weights('model_destinatik_v2_.weights.h5')
 
 
 @app.route('/recommend', methods=['POST'])
