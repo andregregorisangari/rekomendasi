@@ -81,11 +81,17 @@ sample_inputs = np.array([[0, 0], [1, 1]])  # Example shape, replace with actual
 model(sample_inputs)  # Call the model to build it
 
 # Save the model in TensorFlow SavedModel format
-model.save_weights('model_destinatik.weights.h5')
+model.save_weights('model_destinatik.weights')
+
+@app.route('/', methods=['GET'])
+def hello():
+    return 'Hello World'
 
 
 @app.route('/recommend', methods=['POST'])
 def recommend():
+    if request.method == 'GET':
+        return 'Hello World'
     try:
         data = request.json
         user_id = data.get('user_id')
